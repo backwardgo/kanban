@@ -1,5 +1,7 @@
 package models
 
+import "github.com/backwardgo/kanban/passwords"
+
 type Signin struct {
 	Email    Email  `db:"-" json:"email"`
 	Password string `db:"-" json:"password"`
@@ -30,4 +32,8 @@ func (m *Signin) Errors() Errors {
 func (m *Signin) Normalize() {
 	m.Email = m.Email.Normalize()
 	m.Password = trimSpace(m.Password)
+}
+
+func (m *Signin) PasswordDigest() []byte {
+	return passwords.Digest(m.Password)
 }
