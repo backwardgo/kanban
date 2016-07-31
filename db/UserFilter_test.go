@@ -74,6 +74,185 @@ var _ = Describe("UserFilter", func() {
 				Expect(err).To(BeNil())
 			})
 		})
+
+		Context("UserSlice: pager: {page: 1, perPage: 1}; orderBy: nil", func() {
+			var (
+				pager db.Pager
+				users []models.User
+				err   error
+			)
+
+			JustBeforeEach(func() {
+				pager = db.NewPager(1, 1)
+				users, err = db.UserSlice(txn, userFilter, pager)
+			})
+
+			Specify("pager.Page", func() {
+				Expect(pager.Page()).To(BeEquivalentTo(1))
+			})
+
+			Specify("pager.PerPage", func() {
+				Expect(pager.PerPage()).To(BeEquivalentTo(1))
+			})
+
+			Specify("pager.TotalRecords", func() {
+				Expect(pager.TotalRecords()).To(BeEquivalentTo(3))
+			})
+
+			Specify("users", func() {
+				Expect(users).To(HaveLen(1))
+				Expect(users).To(ConsistOf(
+					user1,
+				))
+			})
+
+			Specify("err", func() {
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("UserSlice: pager: {page: 2, perPage: 1}; orderBy: nil", func() {
+			var (
+				pager db.Pager
+				users []models.User
+				err   error
+			)
+
+			JustBeforeEach(func() {
+				pager = db.NewPager(2, 1)
+				users, err = db.UserSlice(txn, userFilter, pager)
+			})
+
+			Specify("pager.Page", func() {
+				Expect(pager.Page()).To(BeEquivalentTo(2))
+			})
+
+			Specify("pager.PerPage", func() {
+				Expect(pager.PerPage()).To(BeEquivalentTo(1))
+			})
+
+			Specify("pager.TotalRecords", func() {
+				Expect(pager.TotalRecords()).To(BeEquivalentTo(3))
+			})
+
+			Specify("users", func() {
+				Expect(users).To(HaveLen(1))
+				Expect(users).To(ConsistOf(
+					user2,
+				))
+			})
+
+			Specify("err", func() {
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("UserSlice: pager: {page: 3, perPage: 1}; orderBy: nil", func() {
+			var (
+				pager db.Pager
+				users []models.User
+				err   error
+			)
+
+			JustBeforeEach(func() {
+				pager = db.NewPager(3, 1)
+				users, err = db.UserSlice(txn, userFilter, pager)
+			})
+
+			Specify("pager.Page", func() {
+				Expect(pager.Page()).To(BeEquivalentTo(3))
+			})
+
+			Specify("pager.PerPage", func() {
+				Expect(pager.PerPage()).To(BeEquivalentTo(1))
+			})
+
+			Specify("pager.TotalRecords", func() {
+				Expect(pager.TotalRecords()).To(BeEquivalentTo(3))
+			})
+
+			Specify("users", func() {
+				Expect(users).To(HaveLen(1))
+				Expect(users).To(ConsistOf(
+					user3,
+				))
+			})
+
+			Specify("err", func() {
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("UserSlice: pager: {page: 4, perPage: 1}; orderBy: nil", func() {
+			var (
+				pager db.Pager
+				users []models.User
+				err   error
+			)
+
+			JustBeforeEach(func() {
+				pager = db.NewPager(4, 1)
+				users, err = db.UserSlice(txn, userFilter, pager)
+			})
+
+			Specify("pager.Page", func() {
+				Expect(pager.Page()).To(BeEquivalentTo(4))
+			})
+
+			Specify("pager.PerPage", func() {
+				Expect(pager.PerPage()).To(BeEquivalentTo(1))
+			})
+
+			Specify("pager.TotalRecords", func() {
+				Expect(pager.TotalRecords()).To(BeEquivalentTo(3))
+			})
+
+			Specify("users", func() {
+				Expect(users).To(HaveLen(0))
+			})
+
+			Specify("err", func() {
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("UserSlice: pager: {page: 0, perPage: 0}; orderBy: nil", func() {
+			var (
+				pager db.Pager
+				users []models.User
+				err   error
+			)
+
+			JustBeforeEach(func() {
+				pager = db.NewPager(0, 0)
+				users, err = db.UserSlice(txn, userFilter, pager)
+			})
+
+			Specify("pager.Page", func() {
+				Expect(pager.Page()).To(BeEquivalentTo(1))
+			})
+
+			Specify("pager.PerPage", func() {
+				Expect(pager.PerPage()).To(BeEquivalentTo(200))
+			})
+
+			Specify("pager.TotalRecords", func() {
+				Expect(pager.TotalRecords()).To(BeEquivalentTo(3))
+			})
+
+			Specify("users", func() {
+				Expect(users).To(HaveLen(3))
+				Expect(users).To(ConsistOf(
+					user1,
+					user2,
+					user3,
+				))
+			})
+
+			Specify("err", func() {
+				Expect(err).To(BeNil())
+			})
+		})
 	})
 
 	Describe("filter: one UserIdIn", func() {

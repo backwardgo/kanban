@@ -15,6 +15,6 @@ type OrderBy struct {
 	direction direction
 }
 
-func (ob OrderBy) String() string {
+func (ob OrderBy) Clause() string {
 	return fmt.Sprintf("%v.%v %v", ob.tableName, ob.fieldName, ob.direction)
 }
