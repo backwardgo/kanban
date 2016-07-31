@@ -6,12 +6,12 @@ import (
 )
 
 type UserFilter struct {
-	IdIn []ids.UserId
+	UserIdIn []ids.UserId
 }
 
-func (f *UserFilter) refineQuery(query *dat.SelectBuilder) *dat.SelectBuilder {
-	if len(f.IdIn) > 0 {
-		query = query.Where("users.id in $1", f.IdIn)
+func (f UserFilter) refineQuery(query *dat.SelectBuilder) *dat.SelectBuilder {
+	if len(f.UserIdIn) > 0 {
+		query = query.Where("users.id in $1", f.UserIdIn)
 	}
 
 	return query

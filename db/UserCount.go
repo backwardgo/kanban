@@ -6,7 +6,7 @@ func UserCount(
 	txn Transaction,
 	userFilter UserFilter,
 ) (
-	count int,
+	count uint,
 	err error,
 ) {
 	query := txn.
