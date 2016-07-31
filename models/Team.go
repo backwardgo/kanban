@@ -1,0 +1,48 @@
+package models
+
+import (
+	"time"
+
+	"github.com/backwardgo/kanban/ids"
+)
+
+type Team struct {
+	Id ids.TeamId `db:"id" json:"id"`
+
+	Name        string `db:"name" json:"name"`
+	Slug        string `db:"slug" json:"slug"`
+	Description string `db:"description" json:"description"`
+
+	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
+	DeletedAt *time.Time `db:"deleted_at" json:"deletedAt,omitempty"`
+	UpdatedAt time.Time  `db:"updated_at" json:"updatedAt"`
+
+	CreatedBy ids.UserId `db:"created_by" json:"createdBy"`
+}
+
+func (m *Team) Errors() Errors {
+	m.Normalize()
+
+	e := NewErrors()
+
+	if m.Id.Present() && m.Id.Invalid() {
+		e["id"] = "is invalid"
+	}
+
+	if m.Name == "" {
+		e["name"] = "is required"
+	}
+
+	switch {
+	case m.CreatedBy.Blank():
+		e["createdBy"] = "is required"
+	case m.CreatedBy.Invalid():
+		e["createdBy"] = "is invalid"
+	}
+
+	return e
+}
+
+func (m *Team) Normalize() {
+	m.Name = trimSpace(m.Name)
+}
