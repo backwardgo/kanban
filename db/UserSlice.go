@@ -17,7 +17,7 @@ func UserSlice(
 ) {
 	users := []models.User{}
 
-	query := txn.selekt("users.*").From("users")
+	query := txn.selekt(`users.*`).From(`users`)
 	query = userFilter.refineQuery(query)
 
 	if pager != nil {
@@ -28,10 +28,14 @@ func UserSlice(
 
 		pager.setTotalRecords(totalRecords)
 		query = pager.refineQuery(query)
+	}
 
-		if len(orderBy) == 0 {
-			query = query.OrderBy(`users.id asc`)
-		}
+	if len(orderBy) == 0 {
+		orderBy = append(orderBy, OrderBy{
+			tableName: `users`,
+			fieldName: `id`,
+			direction: Ascending,
+		})
 	}
 
 	for i := range orderBy {
