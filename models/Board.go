@@ -29,6 +29,13 @@ func (m *Board) Errors() Errors {
 		e["id"] = "is invalid"
 	}
 
+	switch {
+	case m.TeamId.Blank():
+		e["teamId"] = "is required"
+	case m.TeamId.Invalid():
+		e["teamId"] = "is invalid"
+	}
+
 	if m.Name == "" {
 		e["name"] = "is required"
 	}

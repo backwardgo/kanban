@@ -100,3 +100,21 @@ func createTestTeam(txn db.Transaction, m *models.Team) {
 	err := db.TeamCreate(txn, m)
 	Expect(err).To(BeNil())
 }
+
+func createTestList(txn db.Transaction, m *models.List) {
+	if m.Title == "" {
+		m.Title = fake.Company()
+	}
+
+	err := db.ListCreate(txn, m)
+	Expect(err).To(BeNil())
+}
+
+func createTestBoard(txn db.Transaction, m *models.Board) {
+	if m.Name == "" {
+		m.Name = fake.Company()
+	}
+
+	err := db.BoardCreate(txn, m)
+	Expect(err).To(BeNil())
+}

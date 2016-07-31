@@ -1,21 +1,10 @@
 package models
 
-import (
-	"time"
-
-	"github.com/backwardgo/kanban/ids"
-)
-
 type Signup struct {
-	Id ids.SignupId `db:"id" json:"id"`
-
 	FirstName string `db:"first_name" json:"firstName"`
 	LastName  string `db:"last_name" json:"lastName"`
+	Email     Email  `db:"email" json:"email"`
 	Password  string `db:"-" json:"password"`
-
-	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
-	DeletedAt *time.Time `db:"deleted_at" json:"deletedAt,omitempty"`
-	UpdatedAt time.Time  `db:"updated_at" json:"updatedAt"`
 }
 
 func (m *Signup) Errors() Errors {
@@ -23,22 +12,25 @@ func (m *Signup) Errors() Errors {
 
 	e := NewErrors()
 
-	if m.Id.Present() && m.Id.Invalid() {
-		e["id"] = "is invalid"
-	}
-
 	if m.FirstName == "" {
 		e["firstName"] = "is required"
 	}
 
-	if m.FirstName == "" {
+	if m.LastName == "" {
 		e["lastName"] = "is required"
+	}
+
+	switch {
+	case m.Email.Blank():
+		e["email"] = "is required"
+	case m.Email.Invalid():
+		e["email"] = "is invalid"
 	}
 
 	switch {
 	case m.Password == "":
 		e["password"] = "is required"
-	case len(m.Password) < 6:
+	case len(m.Password) < minPasswordLen:
 		e["password"] = "is too short"
 	}
 
@@ -48,4 +40,6 @@ func (m *Signup) Errors() Errors {
 func (m *Signup) Normalize() {
 	m.FirstName = trimSpace(m.FirstName)
 	m.LastName = trimSpace(m.LastName)
+	m.Password = trimSpace(m.Password)
+	m.Email = m.Email.Normalize()
 }

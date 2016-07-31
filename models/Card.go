@@ -7,7 +7,8 @@ import (
 )
 
 type Card struct {
-	Id ids.CardId `db:"id" json:"id"`
+	Id     ids.CardId `db:"id" json:"id"`
+	TeamId ids.TeamId `db:"team_id" json:"teamId"`
 
 	ListId ids.ListId `db:"list_id" json:"listId"`
 	Title  string     `db:"title" json:"title"`
@@ -26,6 +27,13 @@ func (m *Card) Errors() Errors {
 
 	if m.Id.Present() && m.Id.Invalid() {
 		e["id"] = "is invalid"
+	}
+
+	switch {
+	case m.TeamId.Blank():
+		e["teamId"] = "is required"
+	case m.TeamId.Invalid():
+		e["teamId"] = "is invalid"
 	}
 
 	switch {

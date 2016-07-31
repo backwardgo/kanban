@@ -54,4 +54,5 @@ func (m *User) Normalize() {
 	m.LastName = trimSpace(m.LastName)
 	m.Initials = trimSpace(m.Initials)
 	m.Biography = trimSpace(m.Biography)
+	m.Email = m.Email.Normalize()
 }
