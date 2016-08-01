@@ -32,14 +32,14 @@ var _ = Describe("UserFilter", func() {
 	Describe("filter: nothing", func() {
 		var userFilter db.UserFilter
 
-		Context("UserCount", func() {
+		Context("CountUsers", func() {
 			var (
 				count uint
 				err   error
 			)
 
 			JustBeforeEach(func() {
-				count, err = db.UserCount(txn, userFilter)
+				count, err = db.CountUsers(txn, userFilter)
 			})
 
 			Specify("count", func() {
@@ -51,14 +51,14 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: nil; orderBy: nil", func() {
+		Context("SelectUsers: pager: nil; orderBy: nil", func() {
 			var (
 				users []models.User
 				err   error
 			)
 
 			JustBeforeEach(func() {
-				users, err = db.UserSlice(txn, userFilter, nil)
+				users, err = db.SelectUsers(txn, userFilter, nil)
 			})
 
 			Specify("users", func() {
@@ -75,7 +75,7 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: {page: 1, perPage: 1}; orderBy: nil", func() {
+		Context("SelectUsers: pager: {page: 1, perPage: 1}; orderBy: nil", func() {
 			var (
 				pager db.Pager
 				users []models.User
@@ -84,7 +84,7 @@ var _ = Describe("UserFilter", func() {
 
 			JustBeforeEach(func() {
 				pager = db.NewPager(1, 1)
-				users, err = db.UserSlice(txn, userFilter, pager)
+				users, err = db.SelectUsers(txn, userFilter, pager)
 			})
 
 			Specify("pager.Page", func() {
@@ -111,7 +111,7 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: {page: 2, perPage: 1}; orderBy: nil", func() {
+		Context("SelectUsers: pager: {page: 2, perPage: 1}; orderBy: nil", func() {
 			var (
 				pager db.Pager
 				users []models.User
@@ -120,7 +120,7 @@ var _ = Describe("UserFilter", func() {
 
 			JustBeforeEach(func() {
 				pager = db.NewPager(2, 1)
-				users, err = db.UserSlice(txn, userFilter, pager)
+				users, err = db.SelectUsers(txn, userFilter, pager)
 			})
 
 			Specify("pager.Page", func() {
@@ -147,7 +147,7 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: {page: 3, perPage: 1}; orderBy: nil", func() {
+		Context("SelectUsers: pager: {page: 3, perPage: 1}; orderBy: nil", func() {
 			var (
 				pager db.Pager
 				users []models.User
@@ -156,7 +156,7 @@ var _ = Describe("UserFilter", func() {
 
 			JustBeforeEach(func() {
 				pager = db.NewPager(3, 1)
-				users, err = db.UserSlice(txn, userFilter, pager)
+				users, err = db.SelectUsers(txn, userFilter, pager)
 			})
 
 			Specify("pager.Page", func() {
@@ -183,7 +183,7 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: {page: 4, perPage: 1}; orderBy: nil", func() {
+		Context("SelectUsers: pager: {page: 4, perPage: 1}; orderBy: nil", func() {
 			var (
 				pager db.Pager
 				users []models.User
@@ -192,7 +192,7 @@ var _ = Describe("UserFilter", func() {
 
 			JustBeforeEach(func() {
 				pager = db.NewPager(4, 1)
-				users, err = db.UserSlice(txn, userFilter, pager)
+				users, err = db.SelectUsers(txn, userFilter, pager)
 			})
 
 			Specify("pager.Page", func() {
@@ -216,7 +216,7 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: {page: 0, perPage: 0}; orderBy: nil", func() {
+		Context("SelectUsers: pager: {page: 0, perPage: 0}; orderBy: nil", func() {
 			var (
 				pager db.Pager
 				users []models.User
@@ -225,7 +225,7 @@ var _ = Describe("UserFilter", func() {
 
 			JustBeforeEach(func() {
 				pager = db.NewPager(0, 0)
-				users, err = db.UserSlice(txn, userFilter, pager)
+				users, err = db.SelectUsers(txn, userFilter, pager)
 			})
 
 			Specify("pager.Page", func() {
@@ -266,14 +266,14 @@ var _ = Describe("UserFilter", func() {
 			}
 		})
 
-		Context("UserCount", func() {
+		Context("CountUsers", func() {
 			var (
 				count uint
 				err   error
 			)
 
 			JustBeforeEach(func() {
-				count, err = db.UserCount(txn, userFilter)
+				count, err = db.CountUsers(txn, userFilter)
 			})
 
 			Specify("count", func() {
@@ -285,14 +285,14 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: nil; orderBy: nil", func() {
+		Context("SelectUsers: pager: nil; orderBy: nil", func() {
 			var (
 				users []models.User
 				err   error
 			)
 
 			JustBeforeEach(func() {
-				users, err = db.UserSlice(txn, userFilter, nil)
+				users, err = db.SelectUsers(txn, userFilter, nil)
 			})
 
 			Specify("users", func() {
@@ -320,14 +320,14 @@ var _ = Describe("UserFilter", func() {
 			}
 		})
 
-		Context("UserCount", func() {
+		Context("CountUsers", func() {
 			var (
 				count uint
 				err   error
 			)
 
 			JustBeforeEach(func() {
-				count, err = db.UserCount(txn, userFilter)
+				count, err = db.CountUsers(txn, userFilter)
 			})
 
 			Specify("count", func() {
@@ -339,14 +339,14 @@ var _ = Describe("UserFilter", func() {
 			})
 		})
 
-		Context("UserSlice: pager: nil; orderBy: nil", func() {
+		Context("SelectUsers: pager: nil; orderBy: nil", func() {
 			var (
 				users []models.User
 				err   error
 			)
 
 			JustBeforeEach(func() {
-				users, err = db.UserSlice(txn, userFilter, nil)
+				users, err = db.SelectUsers(txn, userFilter, nil)
 			})
 
 			Specify("users", func() {

@@ -2,20 +2,20 @@ package db
 
 import "github.com/backwardgo/kanban/models"
 
-func BoardCreate(
+func CreateList(
 	txn Transaction,
-	board *models.Board,
+	list *models.List,
 ) error {
-	if errors := board.Errors(); errors.Present() {
+	if errors := list.Errors(); errors.Present() {
 		return errors
 	}
 
 	err := txn.
-		insertInto("boards").
+		insertInto("lists").
 		Blacklist("id", "created_at", "deleted_at", "updated_at").
-		Record(board).
+		Record(list).
 		Returning("*").
-		QueryStruct(board)
+		QueryStruct(list)
 
 	return translatePQError(err)
 }

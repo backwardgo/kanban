@@ -14,7 +14,7 @@ func (e Email) Blank() bool {
 }
 
 func (e Email) Present() bool {
-	return !e.Blank()
+	return e != ""
 }
 
 func (e Email) Normalize() Email {
@@ -29,11 +29,11 @@ func (e Email) Valid() bool {
 	return emailValidator.MatchString(string(e))
 }
 
-func (id Email) Value() (driver.Value, error) {
-	return string(id), nil
+func (e Email) Value() (driver.Value, error) {
+	return string(e), nil
 }
 
-func (id *Email) Scan(src interface{}) error {
-	*id = Email(sprintf("%s", src))
+func (e *Email) Scan(src interface{}) error {
+	*e = Email(sprintf("%s", src))
 	return nil
 }

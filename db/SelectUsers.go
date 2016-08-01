@@ -6,7 +6,7 @@ import (
 	"github.com/backwardgo/kanban/models"
 )
 
-func UserSlice(
+func SelectUsers(
 	txn Transaction,
 	userFilter UserFilter,
 	pager Pager,
@@ -21,7 +21,7 @@ func UserSlice(
 	query = userFilter.refineQuery(query)
 
 	if pager != nil {
-		totalRecords, err := UserCount(txn, userFilter)
+		totalRecords, err := CountUsers(txn, userFilter)
 		if err != nil {
 			return users, err
 		}

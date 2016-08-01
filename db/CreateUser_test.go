@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("UserCreate", func() {
+var _ = Describe("CreateUser", func() {
 
 	Describe("Happy Path", func() {
 		var (
@@ -25,7 +25,7 @@ var _ = Describe("UserCreate", func() {
 			user.LastName = "Bart"
 			user.Email = "bart@simpsons.co"
 
-			err := db.UserCreate(txn, &user)
+			err := db.CreateUser(txn, &user)
 			Expect(err).To(BeNil())
 		})
 

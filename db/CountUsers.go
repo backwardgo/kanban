@@ -2,7 +2,7 @@ package db
 
 import "database/sql"
 
-func UserCount(
+func CountUsers(
 	txn Transaction,
 	userFilter UserFilter,
 ) (

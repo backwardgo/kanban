@@ -1,6 +1,5 @@
 CREATE TABLE cards (
   id      serial PRIMARY KEY,
-  team_id int  NOT NULL references teams,
 
   list_id int  NOT NULL references lists,
   title   text NOT NULL,

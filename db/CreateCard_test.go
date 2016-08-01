@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("CardCreate", func() {
+var _ = Describe("CreateCard", func() {
 
 	Describe("Happy Path", func() {
 		var (
@@ -24,27 +24,25 @@ var _ = Describe("CardCreate", func() {
 			var user models.User
 			createTestUser(txn, &user)
 
-			var team models.Team
-			team.CreatedBy = user.Id
-			createTestTeam(txn, &team)
+			//		var team models.Team
+			//		team.CreatedBy = user.Id
+			//		createTestTeam(txn, &team)
 
 			var board models.Board
-			board.TeamId = team.Id
+			//		board.TeamId = team.Id
 			board.CreatedBy = user.Id
 			createTestBoard(txn, &board)
 
 			var list models.List
-			list.TeamId = team.Id
 			list.BoardId = board.Id
 			list.CreatedBy = user.Id
 			createTestList(txn, &list)
 
 			card.Title = "Hello Card!"
-			card.TeamId = team.Id
 			card.ListId = list.Id
 			card.CreatedBy = user.Id
 
-			err := db.CardCreate(txn, &card)
+			err := db.CreateCard(txn, &card)
 			Expect(err).To(BeNil())
 		})
 

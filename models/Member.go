@@ -6,12 +6,12 @@ import (
 	"github.com/backwardgo/kanban/ids"
 )
 
-type Team struct {
-	Id ids.TeamId `db:"id" json:"id"`
+type Member struct {
+	Id ids.UserId `db:"id" json:"id"`
 
-	Name        string `db:"name" json:"name"`
-	Slug        string `db:"slug" json:"slug"`
-	Description string `db:"description" json:"description"`
+	BoardId ids.BoardId `db:"board_id" json:"boardId"`
+	UserId  ids.UserId  `db:"user_id" json:"userId"`
+	Role    Role        `db:"role" json:"role"`
 
 	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
 	DeletedAt *time.Time `db:"deleted_at" json:"deletedAt,omitempty"`
@@ -20,7 +20,7 @@ type Team struct {
 	CreatedBy ids.UserId `db:"created_by" json:"createdBy"`
 }
 
-func (m *Team) Errors() Errors {
+func (m *Member) Errors() Errors {
 	m.Normalize()
 
 	e := NewErrors()
@@ -29,8 +29,18 @@ func (m *Team) Errors() Errors {
 		e["id"] = "is invalid"
 	}
 
-	if m.Name == "" {
-		e["name"] = "is required"
+	switch {
+	case m.BoardId.Blank():
+		e["boardId"] = "is required"
+	case m.BoardId.Invalid():
+		e["boardId"] = "is invalid"
+	}
+
+	switch {
+	case m.UserId.Blank():
+		e["userId"] = "is required"
+	case m.UserId.Invalid():
+		e["userId"] = "is invalid"
 	}
 
 	switch {
@@ -43,6 +53,5 @@ func (m *Team) Errors() Errors {
 	return e
 }
 
-func (m *Team) Normalize() {
-	m.Name = trimSpace(m.Name)
+func (m *Member) Normalize() {
 }

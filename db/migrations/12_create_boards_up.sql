@@ -1,7 +1,6 @@
 CREATE TABLE boards (
-  id          serial PRIMARY KEY,
-  team_id     int  NOT NULL references teams,
-  name        text NOT NULL,
+  id   serial PRIMARY KEY,
+  name text NOT NULL,
 
   created_at timestamp without time zone NOT NULL DEFAULT now(),
   deleted_at timestamp without time zone     NULL,

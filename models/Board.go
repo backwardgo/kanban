@@ -9,8 +9,6 @@ import (
 type Board struct {
 	Id ids.BoardId `db:"id" json:"id"`
 
-	TeamId ids.TeamId `db:"team_id" json:"teamId"`
-
 	Name string `db:"name" json:"name"`
 
 	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
@@ -27,13 +25,6 @@ func (m *Board) Errors() Errors {
 
 	if m.Id.Present() && m.Id.Invalid() {
 		e["id"] = "is invalid"
-	}
-
-	switch {
-	case m.TeamId.Blank():
-		e["teamId"] = "is required"
-	case m.TeamId.Invalid():
-		e["teamId"] = "is invalid"
 	}
 
 	if m.Name == "" {

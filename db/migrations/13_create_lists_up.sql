@@ -1,6 +1,5 @@
 CREATE TABLE lists (
   id      serial PRIMARY KEY,
-  team_id int  NOT NULL references teams,
 
   board_id int  NOT NULL references boards,
   title    text NOT NULL,
