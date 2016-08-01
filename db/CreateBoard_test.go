@@ -3,6 +3,7 @@ package db_test
 import (
 	"github.com/backwardgo/kanban/db"
 	"github.com/backwardgo/kanban/models"
+	"github.com/backwardgo/kanban/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -16,13 +17,17 @@ var _ = Describe("CreateBoard", func() {
 			board models.Board
 		)
 
-		BeforeEach(func() { txn = beginTransaction() })
+		BeforeEach(func() {
+			txn = beginTransaction()
+		})
 
-		AfterEach(func() { rollbackTransaction(txn) })
+		AfterEach(func() {
+			rollbackTransaction(txn)
+		})
 
 		JustBeforeEach(func() {
 			var user models.User
-			createTestUser(txn, &user)
+			helpers.CreateUser(txn, &user)
 
 			board.Name = "Welcome Board"
 			board.CreatedBy = user.Id

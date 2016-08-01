@@ -3,6 +3,7 @@ package db_test
 import (
 	"github.com/backwardgo/kanban/db"
 	"github.com/backwardgo/kanban/models"
+	"github.com/backwardgo/kanban/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -22,11 +23,11 @@ var _ = Describe("CreateList", func() {
 
 		JustBeforeEach(func() {
 			var user models.User
-			createTestUser(txn, &user)
+			helpers.CreateUser(txn, &user)
 
 			var board models.Board
 			board.CreatedBy = user.Id
-			createTestBoard(txn, &board)
+			helpers.CreateBoard(txn, &board)
 
 			list.Title = "Hello List!"
 			list.BoardId = board.Id

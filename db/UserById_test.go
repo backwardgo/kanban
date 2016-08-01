@@ -3,6 +3,7 @@ package db_test
 import (
 	"github.com/backwardgo/kanban/db"
 	"github.com/backwardgo/kanban/models"
+	"github.com/backwardgo/kanban/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -11,18 +12,22 @@ import (
 var _ = Describe("UserById", func() {
 
 	Describe("Happy Path", func() {
-		var txn db.Transaction
-		BeforeEach(func() { txn = beginTransaction() })
-		AfterEach(func() { rollbackTransaction(txn) })
-
 		var (
+			txn  db.Transaction
 			user models.User
 			err  error
 		)
 
-		JustBeforeEach(func() {
-			createTestUser(txn, &user)
+		BeforeEach(func() {
+			txn = beginTransaction()
+		})
 
+		AfterEach(func() {
+			rollbackTransaction(txn)
+		})
+
+		JustBeforeEach(func() {
+			helpers.CreateUser(txn, &user)
 			user, err = db.UserById(txn, user.Id)
 		})
 

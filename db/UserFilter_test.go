@@ -4,6 +4,7 @@ import (
 	"github.com/backwardgo/kanban/db"
 	"github.com/backwardgo/kanban/ids"
 	"github.com/backwardgo/kanban/models"
+	"github.com/backwardgo/kanban/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -20,9 +21,9 @@ var _ = Describe("UserFilter", func() {
 	BeforeEach(func() {
 		txn = beginTransaction()
 
-		createTestUser(txn, &user1)
-		createTestUser(txn, &user2)
-		createTestUser(txn, &user3)
+		helpers.CreateUser(txn, &user1)
+		helpers.CreateUser(txn, &user2)
+		helpers.CreateUser(txn, &user3)
 	})
 
 	AfterEach(func() {

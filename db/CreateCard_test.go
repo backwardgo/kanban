@@ -3,6 +3,7 @@ package db_test
 import (
 	"github.com/backwardgo/kanban/db"
 	"github.com/backwardgo/kanban/models"
+	"github.com/backwardgo/kanban/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -16,27 +17,26 @@ var _ = Describe("CreateCard", func() {
 			card models.Card
 		)
 
-		BeforeEach(func() { txn = beginTransaction() })
+		BeforeEach(func() {
+			txn = beginTransaction()
+		})
 
-		AfterEach(func() { rollbackTransaction(txn) })
+		AfterEach(func() {
+			rollbackTransaction(txn)
+		})
 
 		JustBeforeEach(func() {
 			var user models.User
-			createTestUser(txn, &user)
-
-			//		var team models.Team
-			//		team.CreatedBy = user.Id
-			//		createTestTeam(txn, &team)
+			helpers.CreateUser(txn, &user)
 
 			var board models.Board
-			//		board.TeamId = team.Id
 			board.CreatedBy = user.Id
-			createTestBoard(txn, &board)
+			helpers.CreateBoard(txn, &board)
 
 			var list models.List
 			list.BoardId = board.Id
 			list.CreatedBy = user.Id
-			createTestList(txn, &list)
+			helpers.CreateList(txn, &list)
 
 			card.Title = "Hello Card!"
 			card.ListId = list.Id
