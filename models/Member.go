@@ -37,6 +37,13 @@ func (m *Member) Errors() Errors {
 	}
 
 	switch {
+	case m.Role.Blank():
+		e["role"] = "is required"
+	case m.Role.Invalid():
+		e["role"] = "is invalid"
+	}
+
+	switch {
 	case m.UserId.Blank():
 		e["userId"] = "is required"
 	case m.UserId.Invalid():

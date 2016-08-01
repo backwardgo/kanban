@@ -1,11 +1,19 @@
 package models
 
-import "database/sql/driver"
+import (
+	"database/sql/driver"
+
+	"github.com/backwardgo/kanban/models/roles"
+)
 
 type Role string
 
 func (r Role) Blank() bool {
 	return r == ""
+}
+
+func (r Role) Invalid() bool {
+	return !r.Valid()
 }
 
 func (r Role) Normalize() Role {
@@ -17,11 +25,10 @@ func (r Role) Present() bool {
 }
 
 func (r Role) Valid() bool {
-	return r == "owner" ||
-		r == "admin" ||
-		r == "virtual" ||
-		r == "member" ||
-		r == "observer"
+	return r == roles.Admin ||
+		r == roles.Default ||
+		r == roles.Observer ||
+		r == roles.Virtual
 }
 
 func (r Role) Value() (driver.Value, error) {

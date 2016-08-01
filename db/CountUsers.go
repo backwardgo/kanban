@@ -21,5 +21,5 @@ func CountUsers(
 		err = nil
 	}
 
-	return count, err
+	return
 }

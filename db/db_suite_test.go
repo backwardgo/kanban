@@ -6,6 +6,7 @@ import (
 
 	"github.com/backwardgo/kanban/db"
 	"github.com/backwardgo/kanban/models"
+	"github.com/backwardgo/kanban/models/roles"
 	"github.com/icrowley/fake"
 	"github.com/jmoiron/sqlx"
 	. "github.com/onsi/ginkgo"
@@ -119,6 +120,15 @@ func createTestBoard(txn db.Transaction, m *models.Board) {
 	Expect(err).To(BeNil())
 }
 
+func createTestMember(txn db.Transaction, m *models.Member) {
+	if m.Role.Blank() {
+		m.Role = roles.Default
+	}
+
+	err := db.CreateMember(txn, m)
+	Expect(err).To(BeNil())
+}
+
 func createTestCard(txn db.Transaction, m *models.Card) {
 	if m.Title == "" {
 		m.Title = fmt.Sprintf("Card %v", nextTestId())
@@ -131,13 +141,25 @@ func createTestCard(txn db.Transaction, m *models.Card) {
 // -------
 
 type basicTeamFixture struct {
-	User1 models.User // regular, active member (owner)
-	User2 models.User // regular, active member
-	User3 models.User // deleted, former member
+	User1 models.User
+	User2 models.User
+	User3 models.User
 
 	BoardA models.Board // CreatedBy User1
 	BoardB models.Board // CreatedBy User2
 	BoardC models.Board // CreatedBy User3
+
+	MemberA1 models.Member // BoardA; User1; admin
+	MemberA2 models.Member // BoardA; User2; default
+	MemberA3 models.Member // BoardA; User3; observer
+
+	MemberB1 models.Member // BoardB; User1; observer
+	MemberB2 models.Member // BoardB; User2; admin
+	MemberB3 models.Member // BoardB; User3; default
+
+	MemberC1 models.Member // BoardC; User1; default
+	MemberC2 models.Member // BoardC; User2; observer
+	MemberC3 models.Member // BoardC; User3; admin
 
 	// ListA* belongs to BoardA
 	ListA1 models.List // CreatedBy User1
@@ -200,14 +222,12 @@ type basicTeamFixture struct {
 	CardC33 models.Card // CreatedBy User3
 }
 
-func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
+func createBasicTeamFixture(txn db.Transaction) (m basicTeamFixture) {
 	{ // create the users
 		createTestUser(txn, &m.User1)
 		createTestUser(txn, &m.User2)
 		createTestUser(txn, &m.User3)
 	}
-
-	// TODO create members!
 
 	{ // create the boards
 		m.BoardA.CreatedBy = m.User1.Id
@@ -217,6 +237,60 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 		createTestBoard(txn, &m.BoardA)
 		createTestBoard(txn, &m.BoardB)
 		createTestBoard(txn, &m.BoardC)
+	}
+
+	{ // create the members
+		{ // for BoardA
+			m.MemberA1.BoardId = m.BoardA.Id
+			m.MemberA2.BoardId = m.BoardA.Id
+			m.MemberA3.BoardId = m.BoardA.Id
+
+			m.MemberA1.Role = roles.Admin
+			m.MemberA2.Role = roles.Default
+			m.MemberA3.Role = roles.Observer
+
+			m.MemberA1.UserId = m.User1.Id
+			m.MemberA2.UserId = m.User2.Id
+			m.MemberA3.UserId = m.User3.Id
+
+			createTestMember(txn, &m.MemberA1)
+			createTestMember(txn, &m.MemberA2)
+			createTestMember(txn, &m.MemberA3)
+		}
+		{ // for BoardB
+			m.MemberB1.BoardId = m.BoardB.Id
+			m.MemberB2.BoardId = m.BoardB.Id
+			m.MemberB3.BoardId = m.BoardB.Id
+
+			m.MemberB1.Role = roles.Observer
+			m.MemberB2.Role = roles.Admin
+			m.MemberB3.Role = roles.Default
+
+			m.MemberB1.UserId = m.User1.Id
+			m.MemberB2.UserId = m.User2.Id
+			m.MemberB3.UserId = m.User3.Id
+
+			createTestMember(txn, &m.MemberB1)
+			createTestMember(txn, &m.MemberB2)
+			createTestMember(txn, &m.MemberB3)
+		}
+		{ // for BoardC
+			m.MemberC1.BoardId = m.BoardC.Id
+			m.MemberC2.BoardId = m.BoardC.Id
+			m.MemberC3.BoardId = m.BoardC.Id
+
+			m.MemberC1.Role = roles.Default
+			m.MemberC2.Role = roles.Observer
+			m.MemberC3.Role = roles.Admin
+
+			m.MemberC1.UserId = m.User1.Id
+			m.MemberC2.UserId = m.User2.Id
+			m.MemberC3.UserId = m.User3.Id
+
+			createTestMember(txn, &m.MemberC1)
+			createTestMember(txn, &m.MemberC2)
+			createTestMember(txn, &m.MemberC3)
+		}
 	}
 
 	{ // create the lists
@@ -252,7 +326,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 	}
 
 	{ // create the cards
-
 		{ // for ListA1
 			m.CardA11.ListId = m.ListA1.Id
 			m.CardA12.ListId = m.ListA1.Id
@@ -265,7 +338,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardA12)
 			createTestCard(txn, &m.CardA13)
 		}
-
 		{ // for ListA2
 			m.CardA21.ListId = m.ListA2.Id
 			m.CardA22.ListId = m.ListA2.Id
@@ -278,7 +350,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardA22)
 			createTestCard(txn, &m.CardA23)
 		}
-
 		{ // for ListA3
 			m.CardA31.ListId = m.ListA3.Id
 			m.CardA32.ListId = m.ListA3.Id
@@ -291,7 +362,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardA32)
 			createTestCard(txn, &m.CardA33)
 		}
-
 		{ // for ListB1
 			m.CardB11.ListId = m.ListB1.Id
 			m.CardB12.ListId = m.ListB1.Id
@@ -304,7 +374,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardB12)
 			createTestCard(txn, &m.CardB13)
 		}
-
 		{ // for ListB2
 			m.CardB21.ListId = m.ListB2.Id
 			m.CardB22.ListId = m.ListB2.Id
@@ -317,7 +386,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardB22)
 			createTestCard(txn, &m.CardB23)
 		}
-
 		{ // for ListB3
 			m.CardB31.ListId = m.ListB3.Id
 			m.CardB32.ListId = m.ListB3.Id
@@ -330,7 +398,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardB32)
 			createTestCard(txn, &m.CardB33)
 		}
-
 		{ // for ListC1
 			m.CardC11.ListId = m.ListC1.Id
 			m.CardC12.ListId = m.ListC1.Id
@@ -343,7 +410,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardC12)
 			createTestCard(txn, &m.CardC13)
 		}
-
 		{ // for ListC2
 			m.CardC21.ListId = m.ListC2.Id
 			m.CardC22.ListId = m.ListC2.Id
@@ -356,7 +422,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardC22)
 			createTestCard(txn, &m.CardC23)
 		}
-
 		{ // for ListC3
 			m.CardC31.ListId = m.ListC3.Id
 			m.CardC32.ListId = m.ListC3.Id
@@ -370,4 +435,6 @@ func createBasicTeamFixture(txn db.Transaction, m basicTeamFixture) {
 			createTestCard(txn, &m.CardC33)
 		}
 	}
+
+	return m
 }
