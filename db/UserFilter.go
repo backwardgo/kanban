@@ -6,15 +6,10 @@ import (
 )
 
 type UserFilter struct {
-	DeletedAtIsNull bool
-	UserIdIn        []ids.UserId
+	UserIdIn []ids.UserId
 }
 
 func (f UserFilter) refineQuery(query *dat.SelectBuilder) *dat.SelectBuilder {
-	if f.DeletedAtIsNull {
-		query = query.Where("users.deleted_at IS NULL")
-	}
-
 	if len(f.UserIdIn) > 0 {
 		query = query.Where("users.id in $1", f.UserIdIn)
 	}

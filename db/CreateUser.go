@@ -12,7 +12,7 @@ func CreateUser(
 
 	err := txn.
 		insertInto("users").
-		Blacklist("id", "created_at", "deleted_at", "updated_at").
+		Blacklist("id", "created_at", "updated_at").
 		Record(user).
 		Returning("*").
 		QueryStruct(user)

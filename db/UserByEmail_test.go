@@ -39,10 +39,6 @@ var _ = Describe("UserByEmail", func() {
 			Expect(user.CreatedAt).To(BeTemporally("==", user.UpdatedAt))
 		})
 
-		Specify("user.DeletedAt", func() {
-			Expect(user.DeletedAt).To(BeNil())
-		})
-
 		Specify("user.UpdatedAt", func() {
 			Expect(user.UpdatedAt.IsZero()).To(BeFalse())
 			Expect(user.UpdatedAt).To(BeTemporally("==", user.CreatedAt))

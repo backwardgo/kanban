@@ -9,7 +9,6 @@ CREATE TABLE users (
   password_digest bytea  NOT NULL,
 
   created_at timestamp without time zone NOT NULL DEFAULT now(),
-  deleted_at timestamp without time zone     NULL,
   updated_at timestamp without time zone NOT NULL
 );
 

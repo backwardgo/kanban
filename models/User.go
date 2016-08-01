@@ -17,9 +17,8 @@ type User struct {
 	Email          Email  `db:"email" json:"email"`
 	PasswordDigest []byte `db:"password_digest" json:"-"`
 
-	CreatedAt time.Time  `db:"created_at" json:"createdAt"`
-	DeletedAt *time.Time `db:"deleted_at" json:"deletedAt,omitempty"`
-	UpdatedAt time.Time  `db:"updated_at" json:"updatedAt"`
+	CreatedAt time.Time `db:"created_at" json:"createdAt"`
+	UpdatedAt time.Time `db:"updated_at" json:"updatedAt"`
 }
 
 func (m *User) Errors() Errors {
